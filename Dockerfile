@@ -21,7 +21,6 @@ RUN npm install --omit=dev
 FROM node:19-alpine3.15 as runner
 EXPOSE 3000
 WORKDIR /app
-ENV SERVER_PORT 3000
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 CMD [ "node","dist/main.js"]
