@@ -21,6 +21,10 @@ export class ActivitiesController {
   create(@Body() createActivityDto: CreateActivityDto) {
     return this.activitiesService.create(createActivityDto);
   }
+  @Post('bulk')
+  createBulk(@Body() createActivityDto: CreateActivityDto[]) {
+    return this.activitiesService.createBulk(createActivityDto);
+  }
 
   @Get()
   findAll(@Query() paginationDto: PaginationDto) {

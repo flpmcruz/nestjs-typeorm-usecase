@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Activity } from 'src/activities/entities/activity.entity';
+import { Activity } from '../activities/entities/activity.entity';
 
 @Injectable()
 export class SeedService {
@@ -124,7 +124,11 @@ export class SeedService {
   ) {}
 
   populateDB() {
-    this.activityRepository.clear();
+    this.deleteDB();
     return this.activityRepository.save(this.data);
+  }
+
+  deleteDB() {
+    return this.activityRepository.clear();
   }
 }

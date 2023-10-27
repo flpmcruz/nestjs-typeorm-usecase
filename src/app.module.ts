@@ -22,6 +22,7 @@ const imports = [
   CommonModule,
 ];
 
+// Don't load the seed module in production
 process.env.NODE_ENV !== 'production' && imports.push(SeedModule);
 
 @Module({ imports })

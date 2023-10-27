@@ -32,6 +32,16 @@ export class ActivitiesService {
     }
   }
 
+  async createBulk(createActivityDto: CreateActivityDto[]) {
+    try {
+      const activity = this.activityRepository.create(createActivityDto);
+      await this.activityRepository.save(activity);
+      return activity;
+    } catch (error) {
+      this.handleDBException(error);
+    }
+  }
+
   async findAll(paginationDto: PaginationDto) {
     const { limit = 10, offset = 0 } = paginationDto;
     return await this.activityRepository.find({
@@ -65,12 +75,14 @@ export class ActivitiesService {
   async remove(id: number) {
     const activity = await this.findOne(id);
     await this.activityRepository.remove(activity);
+    return `Activity ${id} removed`;
   }
 
   private handleDBException(error: any) {
     if (error.code === '23505') throw new BadRequestException(error.detail);
 
     this.logger.error(error);
+    // TODO: log errors to a file or external service
     throw new InternalServerErrorException('Internal server error');
   }
 }
