@@ -4,3 +4,5 @@ DockerFile
 .git
 .dockerignore
 .gitignore
+.REAMDE.md
+.vscode
