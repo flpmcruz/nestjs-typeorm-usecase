@@ -6,6 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
 
 import { Activity } from './entities/activity.entity';
@@ -17,10 +18,15 @@ import { PaginationDto } from 'src/common/dtos/pagination.dto';
 @Injectable()
 export class ActivitiesService {
   private readonly logger = new Logger('ActivitiesService');
+  private defaultLimit: number;
+
   constructor(
     @InjectRepository(Activity)
     private readonly activityRepository: Repository<Activity>,
-  ) {}
+    private readonly configService: ConfigService,
+  ) {
+    this.defaultLimit = this.configService.get<number>('default_limit');
+  }
 
   async create(createActivityDto: CreateActivityDto) {
     try {
@@ -43,7 +49,7 @@ export class ActivitiesService {
   }
 
   async findAll(paginationDto: PaginationDto) {
-    const { limit = 10, offset = 0 } = paginationDto;
+    const { limit = this.defaultLimit, offset = 0 } = paginationDto;
     return await this.activityRepository.find({
       skip: offset,
       take: limit,

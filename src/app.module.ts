@@ -5,17 +5,20 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ActivitiesModule } from './activities/activities.module';
 import { CommonModule } from './common/common.module';
 import { SeedModule } from './seed/seed.module';
+import { EnvConfiguration } from './config/envs.config';
 
 const imports = [
+  ConfigModule.forRoot({
+    load: [EnvConfiguration],
+  }),
   ActivitiesModule,
-  ConfigModule.forRoot(),
   TypeOrmModule.forRoot({
     type: 'postgres',
-    host: process.env.POSTGRES_HOST,
-    port: +process.env.POSTGRES_POR,
-    database: process.env.POSTGRES_DB,
-    username: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASS,
+    host: EnvConfiguration().postgres_host,
+    port: EnvConfiguration().postgres_port,
+    database: EnvConfiguration().postgres_db,
+    username: EnvConfiguration().postgres_user,
+    password: EnvConfiguration().postgres_pass,
     autoLoadEntities: true,
     synchronize: process.env.NODE_ENV !== 'production',
   }),
